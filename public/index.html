@@ -12,19 +12,29 @@
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="loadingIndicator" style="display:none;">Loading...</div>
     <div id="root"></div>
     <script>
+      document.getElementById('loadingIndicator').style.display = 'block';
+    
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", () => {
           navigator.serviceWorker
             .register("./serviceworker.js")
-            .then((reg) =>
-              console.log("Success registering the service worker!", reg.scope)
-            )
-            .catch((err) =>
-              console.log("Failure registering the service worker...", err)
-            );
+            .then((reg) => {
+              console.log("Success registering the service worker!", reg.scope);
+              fetchWeatherData();
+            })
+            .catch((err) => {
+              console.log("Failure registering the service worker...", err);
+              document.getElementById('loadingIndicator').style.display = 'none';
+            });
         });
+      }
+    
+      function fetchWeatherData() {
+        console.log("Weather data fetched");
+        document.getElementById('loadingIndicator').style.display = 'none';
       }
     </script>
   </body>
